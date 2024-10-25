@@ -5,8 +5,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class Window {
-    Process process = new Process(this);
-    ComputationWindow computationWindow = new ComputationWindow(this, process);
+    ComputationWindow computationWindow;
+    Process process = new Process();
 
     JFrame mainFrame;
     JPanel mainPanel;
@@ -21,8 +21,15 @@ public class Window {
     double screenHeight = screenSize.getHeight();
 
     public Window() {
+
+        // ensures that there is only one instance habang nag rrun
+        if (computationWindow == null) {
+            computationWindow = new ComputationWindow(this, process);
+            System.out.println("ComputationWindow is null.");
+        }
+
         // frame
-        mainFrame = new JFrame("CPU Scheduler");
+        mainFrame = new JFrame("CPU Scheduler Simulator");
         mainFrame.setSize((int)screenWidth, (int)screenHeight);
 
         // panel
@@ -57,12 +64,14 @@ public class Window {
         addProcessButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
+                super.mousePressed(e);
                 inputDialog(model);
             }
         });
         removeProcessButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
+                super.mousePressed(e);
                 int selectedRow = processTable.getSelectedRow();
                 if (selectedRow != -1) {
                     model.removeRow(selectedRow);
@@ -75,8 +84,9 @@ public class Window {
         startButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed (MouseEvent e) {
+                super.mousePressed(e);
                 // check if process table is empty
-                if (computationWindow.data.length == 0) {
+                if (process.data.length == 0) {
                     JOptionPane.showMessageDialog(null, "No process added", "Error", JOptionPane.ERROR_MESSAGE);
                 } else {
                     String[] options = {"FCFS", "SRTF"};
@@ -86,13 +96,13 @@ public class Window {
                     switch (selection) {
                         case 0:
                             System.out.println("FCFS selected");
-                            computationWindow.fcfs(computationWindow);
+                            process.fcfs();
                             mainPanel.setVisible(false);
                             computationWindow.panel.setVisible(true);
                             break;
                         case 1:
                             System.out.println("SRTF selected");
-                            computationWindow.srtf(computationWindow);
+                            process.srtf();
                             mainPanel.setVisible(false);
                             computationWindow.panel.setVisible(true);
                             break;
@@ -112,13 +122,15 @@ public class Window {
         mainFrame.setVisible(true);
     }
 
-    public Object[][] getData() {
-        return computationWindow.data;
+
+    private String[][] getData() {
+        return process.data;
     }
+
 
     private void inputDialog(DefaultTableModel model) {
         JPanel panel = new JPanel(new GridLayout(0, 1));
-        JTextField processNoField = new JTextField(computationWindow.processNo + "");
+        JTextField processNoField = new JTextField(process.processNo + "");
         processNoField.setEditable(false);
         JTextField arrivalTimeField = new JTextField();
         JTextField burstTimeField = new JTextField();
@@ -132,10 +144,12 @@ public class Window {
 
         int result = JOptionPane.showConfirmDialog(null, panel, "Enter Process Details", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
         if (result == JOptionPane.OK_OPTION && !arrivalTimeField.getText().isEmpty() && !burstTimeField.getText().isEmpty()) {
+
             String[] row = {processNoField.getText(), arrivalTimeField.getText(), burstTimeField.getText()};
-            computationWindow.processNo++;
+            process.processNo++;
             model.addRow(row); // Add new row to table
-            computationWindow.addRow(row); // Add new row to data
+            process.addRow(row); // Add new row to data
+
         } else if (result == JOptionPane.CANCEL_OPTION) {
             System.out.println("Cancelled.");
         } else {

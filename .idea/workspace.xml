@@ -4,10 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8d151658-c907-49bc-9e1e-7d86f3a1d29f" name="Changes" comment="Add Buttons &amp; Tables">
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/ComputationWindow.java" afterDir="false" />
+    <list default="true" id="8d151658-c907-49bc-9e1e-7d86f3a1d29f" name="Changes" comment="Updated Buttons and Tables">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ComputationWindow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ComputationWindow.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Process.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Process.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Window.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Window.java" afterDir="false" />
     </list>
@@ -38,6 +38,9 @@
     &quot;accountId&quot;: &quot;99a9cca0-0ffe-41f4-b887-a17c9cecd92b&quot;
   }
 }</component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="ProjectErrors" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 2
 }</component>
@@ -57,7 +60,8 @@
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
-    "onboarding.tips.debug.path": "/Users/joaquinpacete/Documents/GitHub/OPRSYST-Project/src/Main.java"
+    "onboarding.tips.debug.path": "/Users/joaquinpacete/Documents/GitHub/OPRSYST-Project/src/Main.java",
+    "settings.editor.selected.configurable": "project.propCompiler"
   }
 }]]></component>
   <component name="RunManager">
@@ -86,11 +90,31 @@
       <option name="project" value="LOCAL" />
       <updated>1729477214755</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Updated Buttons and Tables">
+      <option name="closed" value="true" />
+      <created>1729500057879</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1729500057879</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Add Buttons &amp; Tables" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add Buttons &amp; Tables" />
+    <MESSAGE value="Updated Buttons and Tables" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated Buttons and Tables" />
   </component>
 </project>

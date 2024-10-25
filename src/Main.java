@@ -3,7 +3,7 @@
 public class Main {
 
     public Main() {
-        Window window = new Window();
+       Window window = new Window();
 
     }
 
