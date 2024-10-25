@@ -4,10 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8d151658-c907-49bc-9e1e-7d86f3a1d29f" name="Changes" comment="Updated Buttons and Tables">
+    <list default="true" id="8d151658-c907-49bc-9e1e-7d86f3a1d29f" name="Changes" comment="Updated Classes">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ComputationWindow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ComputationWindow.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Process.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Process.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Window.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Window.java" afterDir="false" />
     </list>
@@ -39,7 +38,7 @@
   }
 }</component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="ProjectErrors" />
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 2
@@ -98,7 +97,15 @@
       <option name="project" value="LOCAL" />
       <updated>1729500057879</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Updated Classes">
+      <option name="closed" value="true" />
+      <created>1729867408660</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1729867408660</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -115,6 +122,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Add Buttons &amp; Tables" />
     <MESSAGE value="Updated Buttons and Tables" />
-    <option name="LAST_COMMIT_MESSAGE" value="Updated Buttons and Tables" />
+    <MESSAGE value="Updated Classes" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated Classes" />
   </component>
 </project>

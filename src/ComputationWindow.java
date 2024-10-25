@@ -61,10 +61,5 @@ public class ComputationWindow {
         });
     }
 
-//    public void updateCell(int row, int column, Object newValue, DefaultTableModel model) {
-//        model.setValueAt(newValue, row, column);
-//    }
-
-
     // end of ComputationWindow Class
 }

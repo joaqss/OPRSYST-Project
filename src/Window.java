@@ -95,12 +95,13 @@ public class Window {
 
                     switch (selection) {
                         case 0:
-                            System.out.println("FCFS selected");
+                            System.out.println("option selected: " + selection);
                             process.fcfs();
                             mainPanel.setVisible(false);
                             computationWindow.panel.setVisible(true);
                             break;
                         case 1:
+                            System.out.println("option selected: " + selection);
                             System.out.println("SRTF selected");
                             process.srtf();
                             mainPanel.setVisible(false);
@@ -156,6 +157,11 @@ public class Window {
             JOptionPane.showMessageDialog(null, "Field is empty", "Error", JOptionPane.ERROR_MESSAGE);
             System.out.println("Field is empty.");
         }
+    }
+
+
+    public void fcfs() {
+        System.out.println("FCFS METHOD CALLED ON WINDOW");
     }
 
     // end of Window class
