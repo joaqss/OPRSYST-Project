@@ -3,7 +3,9 @@ import java.util.Arrays;
 public class Process {
 
     int processNo = 1;
-    String[][] data = {{"1", "3", "3"},{"2", "1", "3"}};
+    String[][] data = {{"1", "3", "3"},
+                        {"2", "1", "3"},
+                        {"3", "2", "3"}};
     int[] arrayQueue; // queue of each process based on their position element
 
     public Process() {
@@ -32,35 +34,49 @@ public class Process {
         System.out.println("DATA LENGTH: " + data.length);
         System.out.println("FCFS method called");
 
-        int dataLength = data.length-1;
+        int dataLength = data.length;
 
         // convert data made from strings to int
         int[][] intData = new int[dataLength][3];
         for (int i=0;i<dataLength;i++) {
             for (int j=0;j<3;j++) {
-                intData[i][j] = Integer.parseInt(data[i+1][j]);
+                intData[i][j] = Integer.parseInt(data[i][j]);
             }
         }
+//        // print converted data
+//        System.out.print("CONVERTED DATA: ");
+//        for (int[] a : intData) {
+//            System.out.print(Arrays.toString(a));
+//        }
 
-        int[][] sortedData;
-        int min, temp;
-        // sorts the double array using insertion sort
-        // https://www.youtube.com/watch?v=EwjnF7rFLns&t=113s
+        int min;
+        int[] minArr, tempArr;
+        int innerElement = 0;
 
+        // sorts the double array using selection sort https://www.youtube.com/watch?v=EwjnF7rFLns&t=113s
         for (int i=0; i<dataLength;i++) {
+            minArr = intData[i];
             min = intData[i][1];
 
-            // not done
-            while ();
+           for (int j=i+1; j<dataLength; j++) {
+               if (min > intData[j][1]) {
+                   min = intData[j][1];
+                   minArr = intData[j];
+                   innerElement = j;
+               }
+           }
+           // used 1D array to move the whole array itself instead of 1 element inside inner array
+            tempArr = intData[i]; //places outerLoop pointer element to temp
+            intData[i] = minArr; // places minVal to outerLoop pointer
+            intData[innerElement] = tempArr; // places temp to innerLoop pointer
 
+        } // end of selection sort
+
+        System.out.println("SORTED DATA based on Arrival Time: ");
+        for (int[] b : intData) {
+            System.out.println(Arrays.toString(b));
         }
 
-//        for (int i=1;i<dataLength;i++) {
-//            for (int j=0; i< dataLength;i++){
-//                intData[1][j];
-//
-//            }
-//        }
     }
 
     public void srtf() {
