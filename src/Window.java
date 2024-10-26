@@ -161,6 +161,11 @@ public class Window {
             computationWindow = new ComputationWindow(Window.this, process);
             System.out.println("ComputationWindow is null. Creating new instance");
         }
+
+        else {
+            computationWindow.refreshTable(process.data);
+            computationWindow.timerStart();
+        }
     }
 
     // end of Window class

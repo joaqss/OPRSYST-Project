@@ -5,17 +5,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.Arrays;
 
 public class ComputationWindow {
     JPanel panel;
     DefaultTableModel model;
     Timer timer;
     int currentRow;
+    String[] column = {"Process No.", "Arrival Time", "Burst Time", "Status", "Waiting Time", "Finish Time", "Turnaround Time"}; // column names
 
     JTextField awtField;
     JTextField tatField;
-
 
 
     // screen size of user
@@ -39,7 +38,7 @@ public class ComputationWindow {
         tatField = new JTextField(); tatField.setEditable(false);
         JButton goBackButton = new JButton("Go Back");
         // table elements
-        String[] column = {"Process No.", "Arrival Time", "Burst Time", "Status", "Waiting Time", "Finish Time", "Turnaround Time"}; // column names
+
         model = new DefaultTableModel(process.data, column);
         JTable processTable = new JTable(model);
         processTable.setRowHeight(30);
@@ -71,6 +70,8 @@ public class ComputationWindow {
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
                 panel.setVisible(false);
+                process.resetValues();
+                resetValues(process);
                 window.mainPanel.setVisible(true);
 
             }
@@ -85,8 +86,13 @@ public class ComputationWindow {
 
             }
         });
+        timerStart();
+    }
+
+    public void timerStart() {
         timer.start();
     }
+
 
     private void updateBurstTime(Process process) {
         if (currentRow < model.getRowCount()) {
@@ -115,6 +121,30 @@ public class ComputationWindow {
             tatField.setText(process.averageWT);
             awtField.setText(process.averageTAT);
         }
+    }
+
+    private void resetValues(Process process) {
+        timer.stop();
+        currentRow = 0;
+        awtField.setText("");
+        tatField.setText("");
+
+        // clear columns 3, 4, 5, 6
+        for (int i=0; i<model.getRowCount(); i++) {
+            model.setValueAt("", i, 3);
+            model.setValueAt("", i, 4);
+            model.setValueAt("", i, 5);
+            model.setValueAt("", i, 6);
+        }
+
+        // retrieve burst time
+        for (int i=0; i<model.getRowCount(); i++) {
+            model.setValueAt(process.data[i][2], i, 2);
+        }
+    }
+
+    public void refreshTable(String[][] data) {
+        model.setDataVector(data, column);
     }
 
     // end of ComputationWindow Class

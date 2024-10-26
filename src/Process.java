@@ -5,7 +5,7 @@ import java.util.Arrays;
 
 public class Process {
 
-    int processNo = 01;
+    int processNo = 1;
     String[][] data = {{"1", "0", "12"},
                         {"2", "2", "6"},
                         {"3", "4", "8"},
@@ -29,6 +29,8 @@ public class Process {
         }
         newData[data.length] = row;
         data = newData;
+
+        resetValues();
 
         for (String[] a : data) {
             System.out.print(Arrays.toString(a));
@@ -131,6 +133,15 @@ public class Process {
     public void srtf() {
         System.out.println("SRTF Method Called.");
         sortData();
+
+    }
+
+    public void resetValues() {
+        averageWT = "";
+        averageTAT = "";
+        waitingTimeArr = new String[data.length];
+        turnaroundTimeArr = new String[data.length];
+        finishTimeArr = new String[data.length];
 
     }
 }
