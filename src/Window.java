@@ -21,13 +21,6 @@ public class Window {
     double screenHeight = screenSize.getHeight();
 
     public Window() {
-
-        // ensures that there is only one instance habang nag rrun
-        if (computationWindow == null) {
-            computationWindow = new ComputationWindow(this, process);
-            System.out.println("ComputationWindow is null.");
-        }
-
         // frame
         mainFrame = new JFrame("CPU Scheduler Simulator");
         mainFrame.setSize((int)screenWidth, (int)screenHeight);
@@ -36,15 +29,17 @@ public class Window {
         mainPanel = new JPanel();
         mainPanel.setSize((int)screenWidth, (int)screenHeight);
         mainPanel.setLayout(null);
-        computationWindow.panel.setVisible(false);
 
         // initialization of elements
         addProcessButton = new JButton("Add Process");
         removeProcessButton = new JButton("Remove Process");
         startButton = new JButton("Start");
-        String[] column = {"Process No.", "Arrival Time", "Burst Time"}; // column names
+        String[] column = {"Process No.", "Arrival Time (s)", "Burst Time (s)"}; // column names
         DefaultTableModel model = new DefaultTableModel(data, column);
         JTable processTable = new JTable(model);
+        processTable.setRowHeight(35);
+        processTable.setFont(new Font("Arial", Font.PLAIN, 14));
+
 
         JScrollPane scrollPane = new JScrollPane(processTable); // used to display headers correctly
 
@@ -95,17 +90,18 @@ public class Window {
 
                     switch (selection) {
                         case 0:
-                            System.out.println("option selected: " + selection);
-                            process.fcfs();
+                            process.fcfs(); // with data sort, displays the sortedArr in computationWin
+                            createComputationWindow();
                             mainPanel.setVisible(false);
                             computationWindow.panel.setVisible(true);
+                            mainFrame.add(computationWindow.panel);
                             break;
                         case 1:
-                            System.out.println("option selected: " + selection);
-                            System.out.println("SRTF selected");
-                            process.srtf();
+                            process.srtf(); // with data sort, displays the sortedArr in computationWin
+                            createComputationWindow();
                             mainPanel.setVisible(false);
                             computationWindow.panel.setVisible(true);
+                            mainFrame.add(computationWindow.panel);
                             break;
                         default:
                             break;
@@ -119,7 +115,6 @@ public class Window {
         // default
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainFrame.add(mainPanel);
-        mainFrame.add(computationWindow.panel);
         mainFrame.setVisible(true);
     }
 
@@ -138,9 +133,9 @@ public class Window {
 
         panel.add(new JLabel("Process No:"));
         panel.add(processNoField);
-        panel.add(new JLabel("Arrival Time:"));
+        panel.add(new JLabel("Arrival Time (s):"));
         panel.add(arrivalTimeField);
-        panel.add(new JLabel("Burst Time:"));
+        panel.add(new JLabel("Burst Time (s):"));
         panel.add(burstTimeField);
 
         int result = JOptionPane.showConfirmDialog(null, panel, "Enter Process Details", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
@@ -160,8 +155,12 @@ public class Window {
     }
 
 
-    public void fcfs() {
-        System.out.println("FCFS METHOD CALLED ON WINDOW");
+    public void createComputationWindow() {
+        // ensures that there is only one instance habang nag rrun
+        if (computationWindow == null) {
+            computationWindow = new ComputationWindow(Window.this, process);
+            System.out.println("ComputationWindow is null. Creating new instance");
+        }
     }
 
     // end of Window class
