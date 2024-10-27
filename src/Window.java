@@ -85,6 +85,7 @@ public class Window {
                 if (process.data.length == 0) {
                     JOptionPane.showMessageDialog(null, "No process added", "Error", JOptionPane.ERROR_MESSAGE);
                 } else {
+                    process.resetValues();
                     String[] options = {"FCFS", "SRTF"};
                     selection = JOptionPane.showOptionDialog(null, "Choose Algorithm", "Start", JOptionPane.DEFAULT_OPTION,
                             JOptionPane.QUESTION_MESSAGE, null, options, null);

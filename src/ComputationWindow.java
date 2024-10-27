@@ -17,11 +17,8 @@ public class ComputationWindow {
     int shortestBTRow;
     int burstTime;
 
-
-
     JTextField awtField;
     JTextField tatField;
-
 
     // screen size of user
     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -128,11 +125,11 @@ public class ComputationWindow {
                 timer.stop();
                 tatField.setText(process.averageWT);
                 awtField.setText(process.averageTAT);
+                JOptionPane.showMessageDialog(null, "All processes are finished.", "Finished", JOptionPane.INFORMATION_MESSAGE);
             }
         }
         // srtf
         else if (window.selection == 1) {
-
             boolean allBurstTimesComplete = true;
 
             // check if all burst time is 0
@@ -152,10 +149,8 @@ public class ComputationWindow {
                     allBurstTimesComplete = false;
                     break;
                 }
-
             }
 
-            System.out.println("currentTime: " + currentTime);
             if (!allBurstTimesComplete) {
 
                 minBurstTime = Integer.MAX_VALUE;
@@ -221,6 +216,7 @@ public class ComputationWindow {
                 timer.stop();
                 tatField.setText(process.averageWT);
                 awtField.setText(process.averageTAT);
+                JOptionPane.showMessageDialog(null, "All processes are finished.", "Finished", JOptionPane.INFORMATION_MESSAGE);
             }
 
         }
@@ -231,6 +227,7 @@ public class ComputationWindow {
         currentRow = 0;
         awtField.setText("");
         tatField.setText("");
+        currentTime = 0;
 
         // clear columns 3, 4, 5, 6
         for (int i=0; i<model.getRowCount(); i++) {

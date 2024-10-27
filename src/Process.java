@@ -9,13 +9,10 @@ public class Process {
                         {"4", "6", "4"}};
 //    String[][] data = {}; // process no, arrival time, burst time
     int[][] intData;
-    int remainingBurstTime;
     String[] waitingTimeArr = new String[data.length];
     String[] turnaroundTimeArr = new String[data.length];
     String[] finishTimeArr = new String[data.length];
     String averageWT, averageTAT;
-
-
 
     public Process() {
         System.out.println("Process instance created.");
@@ -82,43 +79,78 @@ public class Process {
         for (int[] b : intData) {
             System.out.println(Arrays.toString(b));
         }
+    } // end of sortData method
+
+    public void resetValues() {
+        averageWT = "";
+        averageTAT = "";
+        waitingTimeArr = new String[data.length];
+        turnaroundTimeArr = new String[data.length];
+        finishTimeArr = new String[data.length];
+        processNo = 1;
+
     }
-
-
 
     public void fcfs() {
         System.out.println("FCFS Method called");
         sortData();
 
-        // finish time
-        finishTimeArr[0] = Integer.toString(intData[0][1] + intData[0][2]);
-        for (int i=1; i< data.length;i++) {
-             int f = Integer.parseInt(finishTimeArr[i-1]) + intData[i][2]; // finish time + burst
-             finishTimeArr[i] = Integer.toString(f);
-        }
-        System.out.println("FINISH TIME: " + Arrays.toString(finishTimeArr));
+        int n = data.length;
+        int[] remainingBurstTime = new int[n];
+        int currentTime = 0;
+        int completedProcesses = 0;
 
-        // waiting time
-        for (int i=0; i<data.length; i++) {
-            int w = Integer.parseInt(finishTimeArr[i]) - intData[i][1] - intData[i][2]; // burst-arrival
-            waitingTimeArr[i] = Integer.toString(w);
+        // places burst time of each process into one single array
+        for (int i = 0; i < n; i++) {
+            remainingBurstTime[i] = intData[i][2];
         }
-        System.out.println("WAITING TIME: " + Arrays.toString(waitingTimeArr));
 
-        // turnaround time
-        for (int i=0; i<data.length; i++) {
-            int t = Integer.parseInt(finishTimeArr[i]) - intData[i][1]; // finish time - arrival time
-            turnaroundTimeArr[i] = Integer.toString(t);
+        while (completedProcesses < n) {
+            int BTIndex = -1;
+
+            // find process to execute (scan will stop once process is found w/ BT
+            for (int i = 0; i<n; i++) {
+                int arrivalTime = intData[i][1];
+
+                if (arrivalTime <= currentTime && remainingBurstTime[i] > 0) {
+                    BTIndex = i;
+                    break;
+                }
+            }
+
+            if (BTIndex == -1) {
+                currentTime++;
+            } else {
+                remainingBurstTime[BTIndex]--;
+                currentTime++;
+
+                // if process is complete
+                if (remainingBurstTime[BTIndex] == 0) {
+                    completedProcesses++;
+                    finishTimeArr[BTIndex] = String.valueOf(currentTime);
+
+                    int turnaroundTime = currentTime - intData[BTIndex][1];
+                    int waitingTime = turnaroundTime - intData[BTIndex][2];
+                    turnaroundTimeArr[BTIndex] = String.valueOf(turnaroundTime);
+                    waitingTimeArr[BTIndex] = String.valueOf(waitingTime);
+
+                }
+            }
         }
-        System.out.println("TURNAROUND TIME: " + Arrays.toString(turnaroundTimeArr));
+
+        // print table
+        for (int i=0; i<data.length; i++) {
+            System.out.println("Process " + intData[i][0] + " Finish Time: " + finishTimeArr[i] +
+                    " Turnaround Time: " + turnaroundTimeArr[i] + " Waiting Time: " + waitingTimeArr[i]);
+        }
 
         // average waiting time
         int sumW=0;
         for (int i=0; i<data.length; i++) {
             sumW+=Integer.parseInt(waitingTimeArr[i]);
         }
-        System.out.println("SUM: " + sumW);
         averageWT = Double.toString((double) sumW /waitingTimeArr.length);
+        System.out.println("Average waiting time: " + averageWT);
 
         //average turnaround time
         int sumT=0;
@@ -126,8 +158,9 @@ public class Process {
             sumT+=Integer.parseInt(turnaroundTimeArr[i]);
         }
         averageTAT = Double.toString((double) sumT /turnaroundTimeArr.length);
+        System.out.println("Average turnaround time: " + averageTAT);
 
-    }
+    } // end of fcfs method
 
     public void srtf() {
         System.out.println("SRTF Method Called.");
@@ -139,8 +172,8 @@ public class Process {
         boolean[] isCompleted = new boolean[n];
         int completedProcesses = 0;
         int currentTime = 0;
-        int shortestBTIndex = -1;
         int minBurstTime;
+        int shortestBTIndex = -1;
 
         // places burst time of each process into one single array
         for (int i = 0; i < n; i++) {
@@ -148,25 +181,40 @@ public class Process {
         }
 
         while (completedProcesses < n) {
+            System.out.println("remaining burst time array: " + Arrays.toString(remainingBurstTime));
             minBurstTime = Integer.MAX_VALUE;
 
-            // find shortest BT under the current time
+            // find shortest BT under the current time (scan until the end of array)
             for (int i=0; i< data.length; i++) {
                 int arrivalTime = intData[i][1];
 
-                // will just run if arrival time of a process and current time matches
+                System.out.println("current time: " + currentTime);
+                System.out.println("Arrival time: " + arrivalTime);
+
+                // replaces minBurstTime and shortestBTIndex if conditions are met
                 if ((currentTime >= arrivalTime) && (!isCompleted[i]) && (remainingBurstTime[i] < minBurstTime)) {
                     minBurstTime = remainingBurstTime[i];
                     shortestBTIndex = i;
+
+                    System.out.println("NEW SHORTEST BT Index: " + shortestBTIndex);
+                    System.out.println("Remaining Burst Time: " + remainingBurstTime[i]);
+                    System.out.println("Minimum BT: " + minBurstTime);
                 }
             }
 
-            // if no process is found, add time
-            if (shortestBTIndex == -1) {
+            if (shortestBTIndex == -1) { // if no process is found, add time
+                System.out.println("No new shortest BT. ");
+                System.out.println();
                 currentTime++;
-            } else {
+            } else { // if shortestBTIndex is updated/new process is pointed
                 remainingBurstTime[shortestBTIndex]--;
                 currentTime++;
+
+                System.out.println("shortestBTIndex UPDATED: " + shortestBTIndex + " ProcessNo: " +
+                        intData[shortestBTIndex][0]);
+                System.out.println("remaining burst time: " + remainingBurstTime[shortestBTIndex]);
+                System.out.println("Array RBT: " + Arrays.toString(remainingBurstTime));
+                System.out.println();
 
                 // if process is complete
                 if (remainingBurstTime[shortestBTIndex] == 0) {
@@ -181,9 +229,13 @@ public class Process {
                     waitingTimeArr[shortestBTIndex] = Integer.toString(waitingTime);
                     finishTimeArr[shortestBTIndex] = Integer.toString(finishTime[shortestBTIndex]);
                 }
-
             }
+        }
 
+        // print table
+        for (int i=0; i<data.length; i++) {
+            System.out.println("Process " + intData[i][0] + " Finish Time: " + finishTimeArr[i] +
+                    " Turnaround Time: " + turnaroundTimeArr[i] + " Waiting Time: " + waitingTimeArr[i]);
         }
 
         // average waiting time
@@ -192,7 +244,7 @@ public class Process {
             sumW+=Integer.parseInt(waitingTimeArr[i]);
         }
         averageWT = Double.toString((double) sumW /waitingTimeArr.length);
-
+        System.out.println("Average waiting time: " + averageWT);
 
         // average turnaround time
         int sumT = 0;
@@ -200,15 +252,7 @@ public class Process {
             sumT+=Integer.parseInt(turnaroundTimeArr[i]);
         }
         averageTAT = Double.toString((double) sumT /turnaroundTimeArr.length);
+        System.out.println("Average turnaround time: " + averageTAT);
+    } // end of srtf method
 
-    }
-
-    public void resetValues() {
-        averageWT = "";
-        averageTAT = "";
-        waitingTimeArr = new String[data.length];
-        turnaroundTimeArr = new String[data.length];
-        finishTimeArr = new String[data.length];
-
-    }
-}
+} // end of process class
