@@ -1,21 +1,20 @@
-import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Arrays;
 
 public class Process {
 
     int processNo = 1;
-    String[][] data = {{"1", "0", "12"},
-                        {"2", "2", "6"},
-                        {"3", "4", "8"},
+    String[][] data = {{"1", "5", "12"},
+                        {"2", "1", "6"},
+                        {"3", "3", "8"},
                         {"4", "6", "4"}};
 //    String[][] data = {}; // process no, arrival time, burst time
     int[][] intData;
+    int remainingBurstTime;
     String[] waitingTimeArr = new String[data.length];
     String[] turnaroundTimeArr = new String[data.length];
     String[] finishTimeArr = new String[data.length];
     String averageWT, averageTAT;
+
 
 
     public Process() {
@@ -133,6 +132,74 @@ public class Process {
     public void srtf() {
         System.out.println("SRTF Method Called.");
         sortData();
+
+        int n = intData.length;
+        int[] remainingBurstTime = new int[n];
+        int[] finishTime = new int[n];
+        boolean[] isCompleted = new boolean[n];
+        int completedProcesses = 0;
+        int currentTime = 0;
+        int shortestBTIndex = -1;
+        int minBurstTime;
+
+        // places burst time of each process into one single array
+        for (int i = 0; i < n; i++) {
+            remainingBurstTime[i] = intData[i][2];
+        }
+
+        while (completedProcesses < n) {
+            minBurstTime = Integer.MAX_VALUE;
+
+            // find shortest BT under the current time
+            for (int i=0; i< data.length; i++) {
+                int arrivalTime = intData[i][1];
+
+                // will just run if arrival time of a process and current time matches
+                if ((currentTime >= arrivalTime) && (!isCompleted[i]) && (remainingBurstTime[i] < minBurstTime)) {
+                    minBurstTime = remainingBurstTime[i];
+                    shortestBTIndex = i;
+                }
+            }
+
+            // if no process is found, add time
+            if (shortestBTIndex == -1) {
+                currentTime++;
+            } else {
+                remainingBurstTime[shortestBTIndex]--;
+                currentTime++;
+
+                // if process is complete
+                if (remainingBurstTime[shortestBTIndex] == 0) {
+                    isCompleted[shortestBTIndex] = true;
+                    completedProcesses++;
+                    finishTime[shortestBTIndex] = currentTime;
+
+                    // Calculate turnaround time and waiting time
+                    int turnaroundTime = finishTime[shortestBTIndex] - intData[shortestBTIndex][1];
+                    int waitingTime = turnaroundTime - intData[shortestBTIndex][2];
+                    turnaroundTimeArr[shortestBTIndex] = Integer.toString(turnaroundTime);
+                    waitingTimeArr[shortestBTIndex] = Integer.toString(waitingTime);
+                    finishTimeArr[shortestBTIndex] = Integer.toString(finishTime[shortestBTIndex]);
+                }
+
+            }
+
+        }
+
+        // average waiting time
+        int sumW = 0;
+        for (int i=0; i< waitingTimeArr.length; i++) {
+            sumW+=Integer.parseInt(waitingTimeArr[i]);
+        }
+        averageWT = Double.toString((double) sumW /waitingTimeArr.length);
+
+
+        // average turnaround time
+        int sumT = 0;
+        for (int i=0; i< turnaroundTimeArr.length; i++) {
+            sumT+=Integer.parseInt(turnaroundTimeArr[i]);
+        }
+        averageTAT = Double.toString((double) sumT /turnaroundTimeArr.length);
 
     }
 

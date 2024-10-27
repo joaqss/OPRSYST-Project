@@ -14,6 +14,7 @@ public class Window {
     JButton removeProcessButton;
     JButton startButton;
     Object[][] data = getData();
+    int selection;
 
     // screen size of user
     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -85,7 +86,7 @@ public class Window {
                     JOptionPane.showMessageDialog(null, "No process added", "Error", JOptionPane.ERROR_MESSAGE);
                 } else {
                     String[] options = {"FCFS", "SRTF"};
-                    int selection = JOptionPane.showOptionDialog(null, "Choose Algorithm", "Start", JOptionPane.DEFAULT_OPTION,
+                    selection = JOptionPane.showOptionDialog(null, "Choose Algorithm", "Start", JOptionPane.DEFAULT_OPTION,
                             JOptionPane.QUESTION_MESSAGE, null, options, null);
 
                     switch (selection) {

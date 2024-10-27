@@ -12,6 +12,12 @@ public class ComputationWindow {
     Timer timer;
     int currentRow;
     String[] column = {"Process No.", "Arrival Time", "Burst Time", "Status", "Waiting Time", "Finish Time", "Turnaround Time"}; // column names
+    int currentTime = 0;
+    int minBurstTime;
+    int shortestBTRow;
+    int burstTime;
+
+
 
     JTextField awtField;
     JTextField tatField;
@@ -82,8 +88,7 @@ public class ComputationWindow {
         timer = new Timer(400, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                updateBurstTime(process);
-
+                updateBurstTime(window, process);
             }
         });
         timerStart();
@@ -94,32 +99,130 @@ public class ComputationWindow {
     }
 
 
-    private void updateBurstTime(Process process) {
-        if (currentRow < model.getRowCount()) {
-            Object burstTimeObj = model.getValueAt(currentRow, 2);
-            int burstTime;
-            if (burstTimeObj instanceof String) {
-                burstTime = Integer.parseInt((String) burstTimeObj);
-            } else if (burstTimeObj instanceof Integer) {
-                burstTime = (Integer) burstTimeObj;
+    private void updateBurstTime(Window window, Process process) {
+        // fcfs
+        if (window.selection == 0) {
+            if (currentRow < model.getRowCount()) {
+                Object burstTimeObj = model.getValueAt(currentRow, 2);
+                int burstTime;
+                if (burstTimeObj instanceof String) {
+                    burstTime = Integer.parseInt((String) burstTimeObj);
+                } else if (burstTimeObj instanceof Integer) {
+                    burstTime = (Integer) burstTimeObj;
+                } else {
+                    throw new IllegalArgumentException("Unexpected value type: " + burstTimeObj.getClass().getName());
+                }
+
+                if (burstTime > 0) {
+                    currentTime++;
+                    model.setValueAt(burstTime - 1, currentRow, 2); // burst time subtraction
+                    model.setValueAt("RUNNING", currentRow, 3); // status
+                    model.setValueAt(process.waitingTimeArr[currentRow], currentRow, 4); // waiting time
+                } else {
+                    model.setValueAt("FINISHED", currentRow, 3);
+                    model.setValueAt(process.finishTimeArr[currentRow], currentRow, 5); // finish time
+                    model.setValueAt(process.turnaroundTimeArr[currentRow], currentRow, 6); // turnaround time
+                    currentRow++;
+                }
             } else {
-                throw new IllegalArgumentException("Unexpected value type: " + burstTimeObj.getClass().getName());
+                timer.stop();
+                tatField.setText(process.averageWT);
+                awtField.setText(process.averageTAT);
+            }
+        }
+        // srtf
+        else if (window.selection == 1) {
+
+            boolean allBurstTimesComplete = true;
+
+            // check if all burst time is 0
+            for (int i=0; i<model.getRowCount(); i++) {
+                Object burstTimeObj = model.getValueAt(i, 2); // iteration of each i-th process
+                int burstTime;
+
+                if (burstTimeObj instanceof String) {
+                    burstTime = Integer.parseInt((String) burstTimeObj);
+                } else if (burstTimeObj instanceof Integer) {
+                    burstTime = (Integer) burstTimeObj;
+                } else {
+                    throw new IllegalArgumentException("Unexpected value type: " + burstTimeObj.getClass().getName());
+                }
+
+                if (burstTime != 0) {
+                    allBurstTimesComplete = false;
+                    break;
+                }
+
             }
 
-            if (burstTime > 0) {
-                model.setValueAt(burstTime-1, currentRow, 2); // burst time subtraction
-                model.setValueAt("RUNNING", currentRow, 3); // status
-                model.setValueAt(process.waitingTimeArr[currentRow], currentRow, 4); // waiting time
+            System.out.println("currentTime: " + currentTime);
+            if (!allBurstTimesComplete) {
+
+                minBurstTime = Integer.MAX_VALUE;
+                shortestBTRow = -1;
+
+                // find shortest BT under current time
+                for (int i=0; i<model.getRowCount(); i++) {
+                    int arrivalTime = process.intData[i][1]; // get arrival time of i-th process
+                    Object burstTimeObj = model.getValueAt(i, 2); // get burst time on the table
+
+                    if (burstTimeObj instanceof String) {
+                        burstTime = Integer.parseInt((String) burstTimeObj);
+                    } else if (burstTimeObj instanceof Integer) {
+                        burstTime = (Integer) burstTimeObj;
+                    } else {
+                        throw new IllegalArgumentException("Unexpected value type: " + burstTimeObj.getClass().getName());
+                    }
+
+                    // replaces minBurstTime and shortestBTRow if the current process has a shorter burst time
+                    if (arrivalTime <= currentTime && burstTime < minBurstTime && burstTime > 0) {
+                        model.setValueAt("WAITING", i, 3);
+                        minBurstTime = burstTime;
+                        shortestBTRow = i;
+                    }
+                }
+
+
+                if (shortestBTRow == -1) { // increment current time if there is no process selected
+                    currentTime++;
+                }  else { // if a process is selected
+                    Object burstTimeObj = model.getValueAt(shortestBTRow, 2);
+                    int burstTime;
+
+                    if (burstTimeObj instanceof String) {
+                        burstTime = Integer.parseInt((String) burstTimeObj);
+                    } else if (burstTimeObj instanceof Integer) {
+                        burstTime = (Integer) burstTimeObj;
+                    } else {
+                        throw new IllegalArgumentException("Unexpected value type: " + burstTimeObj.getClass().getName());
+                    }
+
+                    if (burstTime > 0) {
+                        burstTime--;
+                        model.setValueAt(burstTime, shortestBTRow, 2); // burst time subtraction
+                        model.setValueAt("RUNNING", shortestBTRow, 3); // status
+                    }
+
+                    if (burstTime == 0) {
+                        model.setValueAt("FINISHED", shortestBTRow, 3);
+                        model.setValueAt(process.waitingTimeArr[shortestBTRow], shortestBTRow, 4); // waiting time
+                        model.setValueAt(process.finishTimeArr[shortestBTRow], shortestBTRow, 5); // finish time
+                        model.setValueAt(process.turnaroundTimeArr[shortestBTRow], shortestBTRow, 6); // turnaround time
+                    }
+
+                }
+
+
+
+
+                currentTime++;
+
             } else {
-                model.setValueAt("FINISHED", currentRow, 3);
-                model.setValueAt(process.finishTimeArr[currentRow], currentRow, 5); // finish time
-                model.setValueAt(process.turnaroundTimeArr[currentRow], currentRow, 6); // turnaround time
-                currentRow++;
+                timer.stop();
+                tatField.setText(process.averageWT);
+                awtField.setText(process.averageTAT);
             }
-        } else {
-            timer.stop();
-            tatField.setText(process.averageWT);
-            awtField.setText(process.averageTAT);
+
         }
     }
 
