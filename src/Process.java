@@ -2,12 +2,13 @@ import java.util.Arrays;
 
 public class Process {
 
+    // ronin modified, I put extra data , -
     int processNo = 1;
-    String[][] data = {{"1", "5", "12"},
-                        {"2", "1", "6"},
-                        {"3", "3", "8"},
-                        {"4", "6", "4"}};
-//    String[][] data = {}; // process no, arrival time, burst time
+//    String[][] data = {{"1", "0", "8", "   -"},
+//            {"2", "1", "4", "   -"},
+//            {"3", "2", "9", "   -"},
+//            {"4", "3", "5", "   -"}};
+    String[][] data = {}; // process no, arrival time, burst time
     int[][] intData;
     String[] waitingTimeArr = new String[data.length];
     String[] turnaroundTimeArr = new String[data.length];
@@ -87,8 +88,6 @@ public class Process {
         waitingTimeArr = new String[data.length];
         turnaroundTimeArr = new String[data.length];
         finishTimeArr = new String[data.length];
-        processNo = 1;
-
     }
 
     public void fcfs() {
@@ -255,4 +254,10 @@ public class Process {
         System.out.println("Average turnaround time: " + averageTAT);
     } // end of srtf method
 
+    public void removeRow(int selectedRow) {
+    }
+
+    public String[][] getData() {
+        return data;
+    }
 } // end of process class
